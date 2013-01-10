@@ -1,0 +1,14 @@
+{
+  "name": "player-physics",
+  "version": "0.0.1",
+  "description": "an attempt at first person shooter physics for three.js",
+  "author": {"name":"max ogden", "email":"max@maxogden.com"},
+  "repository": {
+    "type":"git",
+    "url": "git@github.com:maxogden/player-physics.git"
+  },
+  "dependencies": {
+    "inherits": "1.0.0",
+    "three": "0.54.5-dev"
+  }
+}
