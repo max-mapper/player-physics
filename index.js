@@ -47,13 +47,13 @@ function PlayerPhysics(camera, opts) {
   this.gravityEnabled = true
   
   this.velocity = new THREE.Vector3()
-  
-  this.on('jump', function() {
-    if ( self.canJump === true ) self.velocity.y += self.speed.jump
-    self.canJump = false
-  })
-  
+
   this.on('command', function(command, setting) {
+    if (command === 'jump') {
+      if ( self.canJump === true ) self.velocity.y += self.speed.jump
+      self.canJump = false
+      return
+    }
     self[command] = setting
   })  
 }
