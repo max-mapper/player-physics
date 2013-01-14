@@ -126,7 +126,6 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   }
   
   if (!this.freedom['y-']) this.canJump = true
-if (Math.random() > 0.9) console.log(this.canJump)
   
   this.yawObject.translateX( this.velocity.x )
   this.yawObject.translateY( this.velocity.y )
