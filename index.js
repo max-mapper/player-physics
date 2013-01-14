@@ -42,7 +42,14 @@ function PlayerPhysics(camera, opts) {
   this.moveLeft = false
   this.moveRight = false
 
-  this.isOnObject = false
+  this.freedom = {
+    'x+': true,
+    'x-': true,
+    'y+': true,
+    'y-': true,
+    'z+': true,
+    'z-': true
+  }
   this.canJump = false
   this.gravityEnabled = true
   
@@ -81,11 +88,6 @@ PlayerPhysics.prototype.applyRotationDeltas = function(deltas) {
   this.pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, this.pitchObject.rotation.x))
 }
 
-PlayerPhysics.prototype.isOnObject = function ( booleanValue ) {
-  this.isOnObject = booleanValue
-  this.canJump = booleanValue
-}
-
 PlayerPhysics.prototype.tick = function (delta, cb) {
   if (this.enabled === false) return
 
@@ -102,13 +104,30 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   if (this.moveLeft) this.velocity.x -= this.speed.move * delta
   if (this.moveRight) this.velocity.x += this.speed.move * delta
 
-  if ( this.isOnObject === true ) this.velocity.y = Math.max(0, this.velocity.y)
-
   if (cb) cb(this)
+  
+  if (!this.freedom['x-']) {
+    this.velocity.x = Math.max(0, this.velocity.x)
+  }
+  if (!this.freedom['x+']) {
+    this.velocity.x = Math.min(0, this.velocity.x)
+  }
+  if (!this.freedom['y-']) {
+    this.velocity.y = Math.max(0, this.velocity.y)
+  }
+  if (!this.freedom['y+']) {
+    this.velocity.y = Math.min(0, this.velocity.y)
+  }
+  if (!this.freedom['z-']) {
+    this.velocity.z = Math.max(0, this.velocity.z)
+  }
+  if (!this.freedom['z+']) {
+    this.velocity.z = Math.min(0, this.velocity.z)
+  }
+  
+  if (!this.freedom['y-']) this.canJump = true
   
   this.yawObject.translateX( this.velocity.x )
   this.yawObject.translateY( this.velocity.y )
   this.yawObject.translateZ( this.velocity.z )
-
-  if (this.velocity.y === 0) this.canJump = true
 }
