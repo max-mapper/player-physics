@@ -104,25 +104,31 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   if (this.moveLeft) this.velocity.x -= this.speed.move * delta
   if (this.moveRight) this.velocity.x += this.speed.move * delta
 
+  if (cb) cb(this)
+  
   if (!this.freedom['x-']) {
     this.velocity.x = Math.max(0, this.velocity.x)
-  } else if (!this.freedom['x+']) {
+  }
+  if (!this.freedom['x+']) {
     this.velocity.x = Math.min(0, this.velocity.x)
-  } else if (!this.freedom['y-']) {
+  }
+  if (!this.freedom['y-']) {
     this.velocity.y = Math.max(0, this.velocity.y)
-  } else if (!this.freedom['y+']) {
+  }
+  if (!this.freedom['y+']) {
     this.velocity.y = Math.min(0, this.velocity.y)
-  } else if (!this.freedom['z-']) {
+  }
+  if (!this.freedom['z-']) {
     this.velocity.z = Math.max(0, this.velocity.z)
-  } else if (!this.freedom['z+']) {
+  }
+  if (!this.freedom['z+']) {
     this.velocity.z = Math.min(0, this.velocity.z)
   }
-
-  if (cb) cb(this)
+  
+  if (!this.freedom['y-']) this.canJump = true
+if (Math.random() > 0.9) console.log(this.canJump)
   
   this.yawObject.translateX( this.velocity.x )
   this.yawObject.translateY( this.velocity.y )
   this.yawObject.translateZ( this.velocity.z )
-
-  if (this.velocity.y === 0) this.canJump = true
 }
