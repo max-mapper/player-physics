@@ -30,10 +30,10 @@ function PlayerPhysics(camera, opts) {
     fall: opts.fall || 0.3
   }
 
-  this.pitchObject = new THREE.Object3D()
+  this.pitchObject = opts.pitchObject || new THREE.Object3D()
   if (camera) this.pitchObject.add( camera )
 
-  this.yawObject = new THREE.Object3D()
+  this.yawObject = opts.yawObject || new THREE.Object3D()
   this.yawObject.position.y = 10
   this.yawObject.add( this.pitchObject )
 
@@ -53,7 +53,7 @@ function PlayerPhysics(camera, opts) {
   this.canJump = false
   this.gravityEnabled = true
   
-  this.velocity = new THREE.Vector3()
+  this.velocity = opts.velocityObject || new THREE.Vector3()
 
   this.on('command', function(command, setting) {
     if (command === 'jump') {
