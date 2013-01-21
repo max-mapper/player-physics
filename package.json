@@ -1,6 +1,6 @@
 {
   "name": "player-physics",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "description": "an attempt at first person shooter physics for three.js",
   "author": {"name":"max ogden", "email":"max@maxogden.com"},
   "repository": {

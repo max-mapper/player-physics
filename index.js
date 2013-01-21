@@ -20,14 +20,15 @@ function PlayerPhysics(camera, opts) {
   var self = this
   if (!opts) opts = {}
   
+  
   this.readable = true
   this.writable = true
   this.enabled = false
   
   this.speed = {
-   jump: (opts.jump || 6) * 20,
-   move: (opts.move || 0.12) * 10,
-   fall: (opts.fall || 0.3) * 10
+    jump: (opts.jump || 6),
+    move: (opts.move || 0.12),
+    fall: (opts.fall || 0.3),
   }
 
   this.pitchObject = opts.pitchObject || new THREE.Object3D()
@@ -57,7 +58,6 @@ function PlayerPhysics(camera, opts) {
 
   this.on('command', function(command, setting) {
     if (command === 'jump') {
-
       if ( self.canJump === true) self.velocity.y += self.speed.jump
       self.canJump = false
       return
@@ -104,31 +104,14 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
 
   if (this.moveLeft) this.velocity.x -= this.speed.move * delta
   if (this.moveRight) this.velocity.x += this.speed.move * delta
-
-  if (cb) cb(this)
   
-  if (!this.freedom['x-']) {
-    this.velocity.x = Math.max(0, this.velocity.x)
-  }
-  if (!this.freedom['x+']) {
-    this.velocity.x = Math.min(0, this.velocity.x)
-  }
-  if (!this.freedom['y-']) {
-    this.velocity.y = Math.max(0, this.velocity.y)
-  }
-  if (!this.freedom['y+']) {
-    this.velocity.y = Math.min(0, this.velocity.y)
-  }
-  if (!this.freedom['z-']) {
-    this.velocity.z = Math.max(0, this.velocity.z)
-  }
-  if (!this.freedom['z+']) {
-    this.velocity.z = Math.min(0, this.velocity.z)
-  }
-  
+  if (!this.freedom['x-']) this.velocity.x = Math.max(0, this.velocity.x)
+  if (!this.freedom['x+']) this.velocity.x = Math.min(0, this.velocity.x)
+  if (!this.freedom['y-']) this.velocity.y = Math.max(0, this.velocity.y)
+  if (!this.freedom['y+']) this.velocity.y = Math.min(0, this.velocity.y)
+  if (!this.freedom['z-']) this.velocity.z = Math.max(0, this.velocity.z)
+  if (!this.freedom['z+']) this.velocity.z = Math.min(0, this.velocity.z)
   if (!this.freedom['y-']) this.canJump = true
- 
-  this.yawObject.translateX( this.velocity.x )
-  this.yawObject.translateY( this.velocity.y )
-  this.yawObject.translateZ( this.velocity.z )
+  
+  if (cb) cb(this)
 }
