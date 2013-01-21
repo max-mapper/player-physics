@@ -25,9 +25,9 @@ function PlayerPhysics(camera, opts) {
   this.enabled = false
   
   this.speed = {
-    jump: opts.jump || 6,
-    move: opts.move || 0.12,
-    fall: opts.fall || 0.3
+   jump: (opts.jump || 6) * 20,
+   move: (opts.move || 0.12) * 10,
+   fall: (opts.fall || 0.3) * 10
   }
 
   this.pitchObject = opts.pitchObject || new THREE.Object3D()
@@ -57,7 +57,8 @@ function PlayerPhysics(camera, opts) {
 
   this.on('command', function(command, setting) {
     if (command === 'jump') {
-      if ( self.canJump === true || self.velocity.y === 0) self.velocity.y += self.speed.jump
+
+      if ( self.canJump === true) self.velocity.y += self.speed.jump
       self.canJump = false
       return
     }
@@ -126,7 +127,7 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   }
   
   if (!this.freedom['y-']) this.canJump = true
-  
+ 
   this.yawObject.translateX( this.velocity.x )
   this.yawObject.translateY( this.velocity.y )
   this.yawObject.translateZ( this.velocity.z )
