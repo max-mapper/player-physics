@@ -26,8 +26,8 @@ function PlayerPhysics(camera, opts) {
   this.enabled = false
   
   this.speed = {
-    jump: (opts.jump || 6),
-    move: (opts.move || 0.12),
+    jump: (opts.jump || 10),
+    move: (opts.move || 0.5),
     fall: (opts.fall || 0.3),
   }
 
