@@ -58,7 +58,7 @@ function PlayerPhysics(camera, opts) {
 
   this.on('command', function(command, setting) {
     if (command === 'jump') {
-      if ( self.canJump === true) self.velocity.y += self.speed.jump
+      if ( self.canJump === true) self.velocity.y = self.speed.jump
       self.canJump = false
       return
     }
