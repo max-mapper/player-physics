@@ -26,10 +26,13 @@ function PlayerPhysics(camera, opts) {
   this.enabled = false
   
   this.speed = {
-    jump: (opts.jump || 10),
-    move: (opts.move || 0.5),
+    jump: (opts.jump || 3.25),
+    move: (opts.move || 0.2),
     fall: (opts.fall || 0.3),
   }
+  
+  this.jumpTime = 250
+  this.jumpRemaining = 0
 
   this.pitchObject = opts.pitchObject || new THREE.Object3D()
   if (camera) this.pitchObject.add( camera )
@@ -51,17 +54,13 @@ function PlayerPhysics(camera, opts) {
     'z+': true,
     'z-': true
   }
-  this.canJump = false
+  
+  this.wantsJump = false
   this.gravityEnabled = true
   
   this.velocity = opts.velocityObject || new THREE.Vector3()
 
   this.on('command', function(command, setting) {
-    if (command === 'jump') {
-      if ( self.canJump === true) self.velocity.y = self.speed.jump
-      self.canJump = false
-      return
-    }
     self[command] = setting
   })  
 }
@@ -97,7 +96,15 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   this.velocity.x += (-this.velocity.x) * 0.08 * delta
   this.velocity.z += (-this.velocity.z) * 0.08 * delta
 
-  if (this.gravityEnabled) this.velocity.y -= this.speed.fall * delta
+  if (this.freedom['y-']) this.wantsJump = false
+  if (this.wantsJump && this.jumpRemaining <= 0) this.jumpRemaining = this.jumpTime
+  if (this.jumpRemaining > 0) this.jumpRemaining -= delta * 100
+  if (this.jumpRemaining > 0) {
+    this.velocity.y += this.speed.jump * delta
+  } else {
+    this.jumpRemaining = 0
+    if (this.gravityEnabled) this.velocity.y -= this.speed.fall * delta
+  }
 
   if (this.moveForward) this.velocity.z -= this.speed.move * delta
   if (this.moveBackward) this.velocity.z += this.speed.move * delta
@@ -111,8 +118,6 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   if (!this.freedom['y+']) this.velocity.y = Math.min(0, this.velocity.y)
   if (!this.freedom['z-']) this.velocity.z = Math.max(0, this.velocity.z)
   if (!this.freedom['z+']) this.velocity.z = Math.min(0, this.velocity.z)
-  
-  this.canJump = !this.freedom['y-']
   
   if (cb) cb(this)
 }
