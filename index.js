@@ -26,9 +26,9 @@ function PlayerPhysics(camera, opts) {
   this.enabled = false
   
   this.speed = {
-    jump: (opts.jump || 3.25),
-    move: (opts.move || 0.2),
-    fall: (opts.fall || 0.3),
+    jump: ( opts.jump === undefined ? 3.25 : opts.jump ),
+    move: ( opts.move === undefined ? 0.2 : opts.move ),
+    fall: ( opts.fall === undefined ? 0.3 : opts.fall ),
   }
   
   this.jumpTime = 250
@@ -56,7 +56,7 @@ function PlayerPhysics(camera, opts) {
   }
   
   this.wantsJump = false
-  this.gravityEnabled = true
+  this.gravityEnabled = opts.gravityEnabled === undefined ? true : !!opts.gravityEnabled
   
   this.velocity = opts.velocityObject || new THREE.Vector3()
 
@@ -100,7 +100,7 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   if (this.wantsJump && this.jumpRemaining <= 0) this.jumpRemaining = this.jumpTime
   if (this.jumpRemaining > 0) this.jumpRemaining -= delta * 100
   if (this.jumpRemaining > 0) {
-    this.velocity.y += this.speed.jump * delta
+    if(this.gravityEnabled) this.velocity.y += this.speed.jump * delta
   } else {
     this.jumpRemaining = 0
     if (this.gravityEnabled) this.velocity.y -= this.speed.fall * delta
