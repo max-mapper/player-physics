@@ -118,6 +118,16 @@ PlayerPhysics.prototype.tick = function (delta, cb) {
   if (!this.freedom['y+']) this.velocity.y = Math.min(0, this.velocity.y)
   if (!this.freedom['z-']) this.velocity.z = Math.max(0, this.velocity.z)
   if (!this.freedom['z+']) this.velocity.z = Math.min(0, this.velocity.z)
+
+  if (this.yawObject.position_old &&
+      this.yawObject.rotation_old &&
+        (this.yawObject.position.distanceTo(this.yawObject.position_old) > 0.001 ||
+         this.yawObject.rotation.distanceTo(this.yawObject.rotation_old) > 0.001)
+     ) {
+    this.emit('changed')
+  }
+  this.yawObject.position_old = this.yawObject.position.clone()
+  this.yawObject.rotation_old = this.yawObject.rotation.clone()
   
   if (cb) cb(this)
 }
